@@ -35,7 +35,7 @@ object Day4 : AoCDay {
         }
 
     override fun executePart2(input: String): Any {
-        val cards = parseCards(input).toMutableMap()
+        val cards = parseCards(input)
         val cardsCount = cards.keys
             .associateWith { 1 }
             .toMutableMap()
