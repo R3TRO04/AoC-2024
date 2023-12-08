@@ -20,7 +20,7 @@ object Day6 : AoCDay {
     private val SPACE_REGEX = Regex("\\s+")
     override val day: LocalDate = day(6)
 
-    private fun parseInput(input: String): Map<Long, Long> {
+    private fun parseInput(input: String): List<Pair<Long, Long>> {
         val (time, distance) = input.lines()
             .map { line ->
                 line.trimStart { !it.isDigit() }
@@ -29,7 +29,6 @@ object Day6 : AoCDay {
             }
 
         return time.zip(distance)
-            .toMap()
     }
 
     private fun solveQuadratic(a: Long, b: Long, c: Long): Pair<Double, Double>? {
@@ -44,8 +43,7 @@ object Day6 : AoCDay {
 
     private fun rangeSize(lower: Double, upper: Double) = (ceil(upper).roundToInt() - 1) - (floor(lower).roundToInt() + 1) + 1
 
-    override fun executePart1(input: String) = parseInput(input).entries
-        .map { (time, recordDist) ->
+    override fun executePart1(input: String) = parseInput(input).map { (time, recordDist) ->
             val (lower, upper) = solveQuadratic(-1, time, -recordDist) ?: error("unsolvable")
             rangeSize(lower, upper)
         }
