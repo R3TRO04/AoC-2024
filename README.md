@@ -1,21 +1,17 @@
-![](https://img.shields.io/badge/day%20📅-8-yellow)
-![](https://img.shields.io/badge/stars%20⭐-14-blue)
-![](https://img.shields.io/badge/days%20completed-7-green)
+![](https://img.shields.io/badge/day%20📅-2-yellow)
+![](https://img.shields.io/badge/stars%20⭐-2-blue)
+![](https://img.shields.io/badge/days%20completed-1-green)
 
-# AoC-2023
+# AoC-2024
 
-My solutions for the Advent of Code 2023 (in Kotlin). Note that the vast majority of the scaffolding and util code was
-taken from my [AoC-2022 repository](https://github.com/RaphaelTarita/AoC-2022) from last year.
+My solutions for the Advent of Code 2024 (in Kotlin). Note that the vast majority of the scaffolding and util code was
+taken from [RaphaelTarita](https://github.com/RaphaelTarita)'s [AoC-2023 repository](https://github.com/RaphaelTarita/AoC-2023) from last year.
+Thank you honey ♥︎
 
 ### Direct links:
 
-- [Day 1](src/main/kotlin/com/rtarita/days/Day1.kt): solved, 2 stars ([input](input/day1.txt))
-- [Day 2](src/main/kotlin/com/rtarita/days/Day2.kt): solved, 2 stars ([input](input/day2.txt))
-- [Day 3](src/main/kotlin/com/rtarita/days/Day3.kt): solved, 2 stars ([input](input/day3.txt))
-- [Day 4](src/main/kotlin/com/rtarita/days/Day4.kt): solved, 2 stars ([input](input/day4.txt))
-- [Day 5](src/main/kotlin/com/rtarita/days/Day5.kt): solved, 2 stars ([input](input/day5.txt))
-- [Day 6](src/main/kotlin/com/rtarita/days/Day6.kt): solved, 2 stars ([input](input/day6.txt))
-- [Day 7](src/main/kotlin/com/rtarita/days/Day7.kt): solved, 2 stars ([input](input/day7.txt))
+- [Day 1](src/main/kotlin/com/r3tro04/days/Day1.kt): solved, 2 stars ([input](input/day1.txt))
+
 
 ### Contents:
 
