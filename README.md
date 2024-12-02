@@ -1,17 +1,19 @@
-![](https://img.shields.io/badge/day%20📅-2-yellow)
-![](https://img.shields.io/badge/stars%20⭐-4-blue)
-![](https://img.shields.io/badge/days%20completed-2-green)
+![](https://img.shields.io/badge/Kotlin-2.1.0-7F52FF?logo=kotlin)
+![](https://img.shields.io/badge/Gradle-8.11.1-02303A?logo=gradle)
+![](https://img.shields.io/badge/day%20📆-2-red)
+![](https://img.shields.io/badge/stars%20⭐-4-gold)
+![](https://img.shields.io/badge/days%20completed%20✅-2-58CC02)
 
 # AoC-2024
 
 My solutions for the Advent of Code 2024 (in Kotlin). Note that the vast majority of the scaffolding and util code was
 taken from [RaphaelTarita](https://github.com/RaphaelTarita)'s [AoC-2023 repository](https://github.com/RaphaelTarita/AoC-2023) from last year.
-Thank you honey ♥︎
+Thank you honey 🫶🏼
 
 ### Direct links:
 
 - [Day 1](src/main/kotlin/com/r3tro04/days/Day1.kt): solved, 2 stars ([input](input/day1.txt))
-- [Day 1](src/main/kotlin/com/r3tro04/days/Day2.kt): solved, 2 stars ([input](input/day2.txt))
+- [Day 2](src/main/kotlin/com/r3tro04/days/Day2.kt): solved, 2 stars ([input](input/day2.txt))
 
 
 ### Contents:
