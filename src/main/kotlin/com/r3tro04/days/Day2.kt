@@ -8,72 +8,40 @@ object Day2 : AoCDay {
     override val day: LocalDate = day(2)
 
     override fun executePart1(input: String): Any {
-        return input.lineSequence().map { line ->
-            line.split(" ").map(String::toInt)
-        }.count {
-            var isValid = true
-            var asc = false
-            var desc = false
-
-            it.zipWithNext { l, r ->
-                if (!asc && !desc) {
-                    when {
-                        l < r -> asc = true
-                        l > r -> desc = true
-                        else -> isValid = false
-                    }
-                }
-                if (asc) {
-                    if (l >= r || r - l !in 1..3) {
-                        isValid = false
-                    }
-                }
-                if (desc) {
-                    if (l <= r ||l - r !in 1..3) {
-                        isValid = false
-                    }
-                }
-            }
-            isValid
-        }
+        return input.lineSequence()
+            .map { line -> line.split(" ").map(String::toInt) }
+            .count { it.isSave() }
     }
 
     override fun executePart2(input: String): Any {
-        return input.lineSequence().map { line ->
-            line.split(" ").map(String::toInt)
-        }.count {
-            val listOLists = mutableListOf<List<Int>>()
-            it.forEachIndexed { index, _ ->
-                val lizt = mutableListOf(it).flatten().toMutableList()
-                lizt.removeAt(index)
-                listOLists.add(lizt)
-            }
-            listOLists.any { lisst ->
-                var isValid = true
-                var asc = false
-                var desc = false
-
-                lisst.zipWithNext { l, r ->
-                    if (!asc && !desc) {
-                        when {
-                            l < r -> asc = true
-                            l > r -> desc = true
-                            else -> isValid = false
-                        }
-                    }
-                    if (asc) {
-                        if (l >= r || r - l !in 1..3) {
-                            isValid = false
-                        }
-                    }
-                    if (desc) {
-                        if (l <= r ||l - r !in 1..3) {
-                            isValid = false
-                        }
-                    }
+        return input.lineSequence()
+            .map { line -> line.split(" ").map(String::toInt) }
+            .count { sequence ->
+                sequence.indices.any { index ->
+                    sequence.filterIndexed { i, _ -> i != index }
+                        .isSave()
                 }
-                isValid
             }
-        }
     }
+
+    private fun List<Int>.isSave(): Boolean {
+        var asc = false
+        var desc = false
+        return zipWithNext { a, b ->
+            when {
+                a < b -> {
+                    if (!asc && !desc) asc = true
+                    if (asc) b - a in 1..3
+                    else false
+                }
+                a > b -> {
+                    if (!asc && !desc) desc = true
+                    if (desc) a - b in 1..3
+                    else false
+                }
+                else -> false
+            }
+        }.all { it }
+    }
+
 }
