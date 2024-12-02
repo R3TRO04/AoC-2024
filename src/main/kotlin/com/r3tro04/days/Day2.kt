@@ -25,23 +25,28 @@ object Day2 : AoCDay {
     }
 
     private fun List<Int>.isSave(): Boolean {
-        var asc = false
-        var desc = false
+        if (size < 2) return true
+
+        var direction: Direction? = null
+
         return zipWithNext { a, b ->
             when {
                 a < b -> {
-                    if (!asc && !desc) asc = true
-                    if (asc) b - a in 1..3
-                    else false
+                    if (direction == null) direction = Direction.ASCENDING
+                    direction == Direction.ASCENDING && b - a in 1..3
                 }
                 a > b -> {
-                    if (!asc && !desc) desc = true
-                    if (desc) a - b in 1..3
-                    else false
+                    if (direction == null) direction = Direction.DESCENDING
+                    direction == Direction.DESCENDING && a - b in 1..3
                 }
                 else -> false
             }
         }.all { it }
     }
+
+    private enum class Direction {
+        ASCENDING, DESCENDING
+    }
+
 
 }
