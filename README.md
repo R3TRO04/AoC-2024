@@ -1,6 +1,6 @@
 ![](https://img.shields.io/badge/day%20📅-2-yellow)
-![](https://img.shields.io/badge/stars%20⭐-2-blue)
-![](https://img.shields.io/badge/days%20completed-1-green)
+![](https://img.shields.io/badge/stars%20⭐-4-blue)
+![](https://img.shields.io/badge/days%20completed-2-green)
 
 # AoC-2024
 
@@ -11,6 +11,7 @@ Thank you honey ♥︎
 ### Direct links:
 
 - [Day 1](src/main/kotlin/com/r3tro04/days/Day1.kt): solved, 2 stars ([input](input/day1.txt))
+- [Day 1](src/main/kotlin/com/r3tro04/days/Day2.kt): solved, 2 stars ([input](input/day2.txt))
 
 
 ### Contents:
