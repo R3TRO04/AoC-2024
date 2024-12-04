@@ -34,5 +34,4 @@ object Day3 : AoCDay {
 
     private operator fun MatchResult.component1(): String = this.destructured.component1()
     private operator fun MatchResult.component2(): String = this.destructured.component2()
-
 }
