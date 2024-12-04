@@ -181,7 +181,7 @@ object Day4 : AoCDay {
     private fun Array<CharArray>.diagonalRightDown(i: Int, j: Int, index: Int) : Char? {
         var res : Char? = null
         runCatching {
-            this[i+1+index][j+1+index]
+            this[i+index][j+index]
         }.onSuccess {
             res = it
         }
@@ -190,7 +190,7 @@ object Day4 : AoCDay {
     private fun Array<CharArray>.diagonalRightUp(i: Int, j: Int, index: Int) : Char? {
         var res : Char? = null
         runCatching {
-            this[i+1+index][j-1-index]
+            this[i+index][j-index]
         }.onSuccess {
             res = it
         }
@@ -199,7 +199,7 @@ object Day4 : AoCDay {
     private fun Array<CharArray>.diagonalLeftDown(i: Int, j: Int, index: Int) : Char? {
         var res : Char? = null
         runCatching {
-            this[i-1-index][j+1+index]
+            this[i-index][j+index]
         }.onSuccess {
             res = it
         }
@@ -208,7 +208,7 @@ object Day4 : AoCDay {
     private fun Array<CharArray>.diagonalLeftUp(i: Int, j: Int, index: Int) : Char? {
         var res : Char? = null
         runCatching {
-            this[i-1-index][j-1-index]
+            this[i-index][j-index]
         }.onSuccess {
             res = it
         }
