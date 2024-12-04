@@ -16,7 +16,7 @@ object Day4 : AoCDay {
         }
         val indices = buildMap {
             put(DirectionStart.LEFT, buildList {
-                for (i in 0 until length - 1) {
+                for (i in 0 until length) {
                     if (i + 3 <= length) {
                         add(
                             listOf(
@@ -30,7 +30,7 @@ object Day4 : AoCDay {
                 }
             })
             put( DirectionStart.RIGHT, buildList {
-                for (i in 0 until length - 1) {
+                for (i in 0 until length) {
                     if (i + 3 <= length) {
                         add(
                             listOf(
@@ -44,7 +44,7 @@ object Day4 : AoCDay {
                 }
             })
             put(DirectionStart.UP, buildList {
-                for (i in 0 until depth - 1) {
+                for (i in 0 until depth) {
                     if (i + 3 <= depth) {
                         add(
                             listOf(
@@ -58,7 +58,7 @@ object Day4 : AoCDay {
                 }
             })
             put(DirectionStart.DOWN, buildList {
-                for (i in 0 until depth - 1) {
+                for (i in 0 until depth) {
                     if (i + 3 <= depth) {
                         add(
                             listOf(
@@ -74,7 +74,7 @@ object Day4 : AoCDay {
         }
 
         return buildList {
-            for (i in 0 until length - 1) {
+            for (i in 0 until length) {
                add(
                    indices.filter {
                         it.key == DirectionStart.LEFT || it.key == DirectionStart.RIGHT
@@ -90,7 +90,7 @@ object Day4 : AoCDay {
                     }
                )
             }
-            for (i in 0 until depth - 1) {
+            for (i in 0 until depth) {
                 add(
                     indices.filter {
                         it.key == DirectionStart.UP || it.key == DirectionStart.DOWN
