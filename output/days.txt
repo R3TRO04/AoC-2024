@@ -1,31 +1,31 @@
 Day 1:
     Part 1:
         1151792
-        === took 0.401879ms (4.01879E-4s) ===
+        === took 0.324634ms (3.24634E-4s) ===
     Part 2:
         21790168
-        === took 0.783066ms (7.83066E-4s) ===
+        === took 0.673558ms (6.73558E-4s) ===
 Day 2:
     Part 1:
         314
-        === took 0.326663ms (3.26663E-4s) ===
+        === took 0.3111ms (3.111E-4s) ===
     Part 2:
         373
-        === took 0.866678ms (8.66678E-4s) ===
+        === took 0.764721ms (7.64721E-4s) ===
 Day 3:
     Part 1:
         167090022
-        === took 0.252913ms (2.52913E-4s) ===
+        === took 0.216387ms (2.16387E-4s) ===
     Part 2:
         89823704
-        === took 0.582615ms (5.82615E-4s) ===
+        === took 0.440575ms (4.40575E-4s) ===
 Day 4:
     Part 1:
-        0
-        === took 7ms (0.007900073s) ===
+        2627
+        === took 17ms (0.017159403s) ===
     Part 2:
         (not implemented)
-        === took 0.001ms (1.0E-6s) ===
+        === took 0.001592ms (1.592E-6s) ===
 Day 5:
     Part 1:
         (not implemented)
@@ -137,7 +137,7 @@ Day 20:
         === took 4.1E-5ms (4.1E-8s) ===
     Part 2:
         (not implemented)
-        === took 2.36E-4ms (2.36E-7s) ===
+        === took 4.1E-5ms (4.1E-8s) ===
 Day 21:
     Part 1:
         (not implemented)
@@ -165,7 +165,7 @@ Day 24:
         === took 4.1E-5ms (4.1E-8s) ===
     Part 2:
         (not implemented)
-        === took 4.1E-5ms (4.1E-8s) ===
+        === took 4.2E-5ms (4.2E-8s) ===
 Day 25:
     Part 1:
         (not implemented)
