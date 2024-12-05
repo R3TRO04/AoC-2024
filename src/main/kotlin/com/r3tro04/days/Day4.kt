@@ -6,212 +6,47 @@ import kotlinx.datetime.LocalDate
 
 object Day4 : AoCDay {
     override val day: LocalDate = day(4)
-    private val searchChars = "XMAS"
 
-    // should be 2554
     override fun executePart1(input: String): Any {
-        val length = input.lines().first().lastIndex
-        val depth = input.lines().lastIndex
-        val charArray = Array(length + 1) {
-            CharArray(depth + 1)
-        }
-        input.lineSequence().forEachIndexed { indexLine, s ->
-            s.forEachIndexed { indexChar, c ->
-                charArray[indexChar][indexLine] = c
-            }
-        }
-        val indices = buildMap {
-            put(DirectionStart.LEFT, buildList {
-                for (i in 0..length) {
-                    if (i + 3 <= length) {
-                        add(
-                            listOf(
-                                i,
-                                i + 1,
-                                i + 2,
-                                i + 3,
-                            )
-                        )
-                    }
-                }
-            })
-            put(DirectionStart.RIGHT, buildList {
-                for (i in 0..length) {
-                    if (i + 3 <= length) {
-                        add(
-                            listOf(
-                                i + 3,
-                                i + 2,
-                                i + 1,
-                                i,
-                            )
-                        )
-                    }
-                }
-            })
-            put(DirectionStart.UP, buildList {
-                for (i in 0..depth) {
-                    if (i + 3 <= depth) {
-                        add(
-                            listOf(
-                                i,
-                                i + 1,
-                                i + 2,
-                                i + 3,
-                            )
-                        )
-                    }
-                }
-            })
-            put(DirectionStart.DOWN, buildList {
-                for (i in 0..depth) {
-                    if (i + 3 <= depth) {
-                        add(
-                            listOf(
-                                i + 3,
-                                i + 2,
-                                i + 1,
-                                i,
-                            )
-                        )
-                    }
-                }
-            })
-        }
+        val lines = input.lines()
+        val xmasPattern = "XMAS"
 
-        return buildList {
-            for (i in 0..depth) {
-               add(
-                   indices.filter {
-                        it.key == DirectionStart.LEFT || it.key == DirectionStart.RIGHT
-                    }.map {
-                        it.value
-                    }.map {
-                        it.map { innerList ->
-                            innerList.map { index ->
-                                charArray[index][i]
-                            }
-                        }
-                    }.sumOf {
-                        it.count { chars ->
-                            val s = chars[0].toString() + chars[1] + chars[2] + chars[3]
-                            s == searchChars
-                        }
-                    }
-               )
-            }
-            for (i in 0..length) {
-                add(
-                    indices.filter {
-                        it.key == DirectionStart.UP || it.key == DirectionStart.DOWN
-                    }.map {
-                        it.value
-                    }.map {
-                        it.map { innerList ->
-                            innerList.map { index ->
-                                charArray[i][index]
-                            }
-                        }
-                    }.sumOf {
-                        it.count { chars ->
-                            val s = chars[0].toString() + chars[1] + chars[2] + chars[3]
-                            s == searchChars
-                        }
-                    }
-                )
-            }
-            for (i in 0..length) {
-                for (j in 0..depth) {
-                    add(
-                        buildList {
-                            add(
-                                buildList {
-                                    for (d in 0..3) {
-                                        add(charArray.diagonalRightUp(i, j, d))
-                                    }
-                                }
-                            )
-                            add(
-                                buildList {
-                                    for (d in 0..3) {
-                                        add(charArray.diagonalRightDown(i, j, d))
-                                    }
-                                }
-                            )
-                            add(
-                                buildList {
-                                    for (d in 0..3) {
-                                        add(charArray.diagonalLeftUp(i, j, d))
-                                    }
-                                }
-                            )
-                            add(
-                                buildList {
-                                    for (d in 0..3) {
-                                        add(charArray.diagonalLeftDown(i, j, d))
-                                    }
-                                }
-                            )
-                        }.map {
-                            it.filterNotNull()
-                        }.filter {
-                            it.size == 4
-                        }.count { chars ->
-                            val s = chars[0].toString() + chars[1] + chars[2] + chars[3]
-                            s == searchChars
-                        }
-                    )
+        val directions: List<(Int, Int, Int) -> Char?> = listOf(
+            { i, j, k -> lines.getOrNull(i)?.getOrNull(j + k) }, // Right
+            { i, j, k -> lines.getOrNull(i)?.getOrNull(j - k) }, // Left
+            { i, j, k -> lines.getOrNull(i + k)?.getOrNull(j) }, // Down
+            { i, j, k -> lines.getOrNull(i - k)?.getOrNull(j) }, // Up
+            { i, j, k -> lines.getOrNull(i + k)?.getOrNull(j + k) }, // Diagonal Right Down
+            { i, j, k -> lines.getOrNull(i + k)?.getOrNull(j - k) }, // Diagonal Right Up
+            { i, j, k -> lines.getOrNull(i - k)?.getOrNull(j + k) }, // Diagonal Left Down
+            { i, j, k -> lines.getOrNull(i - k)?.getOrNull(j - k) }  // Diagonal Left Up
+        )
+
+        return lines.indices.sumOf { i ->
+            lines[i].indices.sumOf { j ->
+                directions.count { direction ->
+                    val chars = xmasPattern.indices.mapNotNull { k -> direction(i, j, k) }
+                    chars.size == xmasPattern.length && chars.joinToString("") == xmasPattern
                 }
             }
-        }.sum()
+        }
     }
 
-    // should be 1916
     override fun executePart2(input: String): Any {
-        return "(not implemented)"
-    }
+        val lines = input.lines()
+        val masPatterns = setOf("MAS", "SAM")
 
-    private enum class DirectionStart {
-        LEFT,
-        RIGHT,
-        UP,
-        DOWN,
-    }
+        return (1 until lines.size - 1).sumOf { i ->
+            (1 until lines[0].length - 1).count { j ->
+                val topLeftToBottomRight = (0..2).mapNotNull { k ->
+                    lines.getOrNull(i - 1 + k)?.getOrNull(j - 1 + k)
+                }.joinToString("")
+                val topRightToBottomLeft = (0..2).mapNotNull { k ->
+                    lines.getOrNull(i - 1 + k)?.getOrNull(j + 1 - k)
+                }.joinToString("")
 
-    private fun Array<CharArray>.diagonalRightDown(i: Int, j: Int, index: Int) : Char? {
-        var res : Char? = null
-        runCatching {
-            this[i+index][j+index]
-        }.onSuccess {
-            res = it
+                topLeftToBottomRight in masPatterns && topRightToBottomLeft in masPatterns
+            }
         }
-        return res
-    }
-    private fun Array<CharArray>.diagonalRightUp(i: Int, j: Int, index: Int) : Char? {
-        var res : Char? = null
-        runCatching {
-            this[i+index][j-index]
-        }.onSuccess {
-            res = it
-        }
-        return res
-    }
-    private fun Array<CharArray>.diagonalLeftDown(i: Int, j: Int, index: Int) : Char? {
-        var res : Char? = null
-        runCatching {
-            this[i-index][j+index]
-        }.onSuccess {
-            res = it
-        }
-        return res
-    }
-    private fun Array<CharArray>.diagonalLeftUp(i: Int, j: Int, index: Int) : Char? {
-        var res : Char? = null
-        runCatching {
-            this[i-index][j-index]
-        }.onSuccess {
-            res = it
-        }
-        return res
     }
 }
