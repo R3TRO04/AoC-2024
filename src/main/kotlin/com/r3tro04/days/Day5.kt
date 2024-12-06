@@ -8,59 +8,43 @@ object Day5 : AoCDay {
     override val day: LocalDate = day(5)
 
     override fun executePart1(input: String): Any {
-        val separator = input.lines().indexOf("")
-        val rules = input.lines().filterIndexed { index, _ ->
-            index < separator
-        }.map {
-            Rule.parse(it)
+        val (ruleLines, dataLines) = input.lines().partition { line ->
+            line.isNotBlank() && "|" in line
         }
-        val data = input.lines().filterIndexed { index, _ ->
-            index > separator
+        val rules = ruleLines.mapNotNull { line ->
+            Rule.parse(line).getOrNull()
         }
-        return data.sumOf { s ->
-            transform(rules, s)
-        }
+
+        return dataLines.asSequence()
+            .filter { it.isNotBlank() }
+            .sumOf { line -> transform(rules, line) }
     }
 
     override fun executePart2(input: String): Any {
-        return "(not implemented)"
+        return "not implemented"
     }
 
-
     private fun transform(rules: List<Rule>, input: String): Int {
-        val data = input.lines().map { it.split(",") }
-            .map{ it.map(String::toInt) }
+        val data = input.split(",")
+            .mapNotNull { it.toIntOrNull() }
 
-        return buildList {
-            data.forEach { list ->
-                add(
-                    buildList {
-                        list.forEachIndexed { index, a ->
-                            list.forEach { b ->
-                                if (a != b)
-                                    if (rules.filter { it.x == a }.any { it.validate(a,b) })
-                                        add(list[index])
-                            }
-                        }
-                    }
-                )
+        for (i in data.indices) {
+            for (j in i + 1 until data.size) {
+                if (rules.none { it.validate(data[i], data[j]) }) return 0
             }
-        }.sumOf {
-            if (it.isNotEmpty()) it[(it.size / 2)]
-            else 0
         }
+
+        return data[data.size / 2]
     }
 
     data class Rule(val x: Int, val y: Int) {
-        fun validate(a: Int, b: Int): Boolean {
-            return a == x && b == y
-        }
+        fun validate(a: Int, b: Int): Boolean = a == x && b == y
+
         companion object {
-            fun parse(str: String): Rule =
-                Rule(
-                    str.substringBefore("|").toInt(),
-                    str.substringAfter("|").toInt(),
-                )
+            fun parse(input: String): Result<Rule> = runCatching {
+                val (x, y) = input.split("|").map { it.trim().toInt() }
+                Rule(x, y)
+            }
         }
     }
 }
