@@ -9,30 +9,35 @@ object Day6 : AoCDay {
 
     override fun executePart1(input: String): Any {
         val map = Map.parse(input)
-        while(map.tiles.none { it.appearance == 'W' }) {
+        while (map.tiles.none { it.appearance == 'W' }) {
+            println("Player at position: ${map.player.position} facing: ${map.player.playerChar}")
             map.movePlayer()
         }
-        return map.tiles.count {
-            it.appearance == 'X'
-        }
+        println("Final Map:")
+        println(map.prettyPrint())
+        return map.tiles.count { it.appearance == 'X' } + 1
     }
 
-    override fun executePart2(input: String): Any {
-        return "(not implemented)"
-    }
+    override fun executePart2(input: String): Any = "(not implemented)"
 
     data class Player(
         var playerChar: Char = '^',
         var position: Tile
     ) {
-        fun moveDirection() : Direction {
-            return when (playerChar) {
-                '^' -> Direction.UP
-                'v' -> Direction.DOWN
-                '<' -> Direction.LEFT
-                '>' -> Direction.RIGHT
-                else -> error("wtf")
-            }
+        fun moveDirection(): Direction = when (playerChar) {
+            '^' -> Direction.UP
+            'v' -> Direction.DOWN
+            '<' -> Direction.LEFT
+            '>' -> Direction.RIGHT
+            else -> error("Invalid player character")
+        }
+
+        fun rotate90(): Char = when (playerChar) {
+            '^' -> '>'
+            '>' -> 'v'
+            'v' -> '<'
+            '<' -> '^'
+            else -> error("Invalid player character")
         }
     }
 
@@ -44,65 +49,61 @@ object Day6 : AoCDay {
         val tiles: MutableList<Tile>,
         val player: Player
     ) {
-        fun movePlayer(): Unit {
-            var nextIndex = tiles.indexOfFirst {
-                when(player.moveDirection()) {
-                    Direction.UP -> it.x == player.position.x && it.y == player.position.y - 1
-                    Direction.DOWN -> it.x == player.position.x && it.y == player.position.y + 1
-                    Direction.RIGHT -> it.x + 1 == player.position.x && it.y == player.position.y
-                    Direction.LEFT -> it.x - 1 == player.position.x && it.y == player.position.y
+        fun movePlayer() {
+            repeat(4) { rotations ->
+                val nextTile = tiles.find {
+                    when (player.moveDirection()) {
+                        Direction.UP -> it.x == player.position.x && it.y == player.position.y - 1
+                        Direction.DOWN -> it.x == player.position.x && it.y == player.position.y + 1
+                        Direction.RIGHT -> it.x == player.position.x + 1 && it.y == player.position.y
+                        Direction.LEFT -> it.x == player.position.x - 1 && it.y == player.position.y
+                    }
                 }
-            }
 
-            if (nextIndex == -1) {
-                tiles.add(Tile(Int.MAX_VALUE, Int.MAX_VALUE, 'W'))
-            } else if (tiles[nextIndex].appearance == '#') {
-                while(tiles[nextIndex].appearance == '#') {
-                    player.playerChar = when (player.moveDirection()) {
-                        Direction.UP -> '>'
-                        Direction.RIGHT -> 'v'
-                        Direction.DOWN -> '<'
-                        Direction.LEFT -> '^'
+                when {
+                    nextTile == null -> {
+                        tiles.add(Tile(Int.MAX_VALUE, Int.MAX_VALUE, 'W'))
+                        println("Player moved into uncharted territory")
+                        return
                     }
-                    nextIndex = tiles.indexOfFirst {
-                        when (player.moveDirection()) {
-                            Direction.UP -> it.x + 1 == player.position.x && it.y == player.position.y
-                            Direction.DOWN -> it.x - 1 == player.position.x && it.y == player.position.y
-                            Direction.RIGHT -> it.x == player.position.x && it.y == player.position.y + 1
-                            Direction.LEFT -> it.x == player.position.x && it.y == player.position.y - 1
-                        }
+                    nextTile.appearance == '#' -> {
+                        player.playerChar = player.rotate90()
+                        println("Player hit a wall and rotated to: ${player.playerChar}")
+                    }
+                    else -> {
+                        tiles.find { it.x == player.position.x && it.y == player.position.y }?.appearance = 'X'
+                        player.position = nextTile
+                        println("Player moved to position: ${player.position}")
+                        return
                     }
                 }
-                tiles.first { player.position == it }.appearance = 'X'
-                player.position = tiles[nextIndex]
-            } else {
-                tiles.first {
-                    player.position.x == it.x && player.position.y == it.y
-                }.appearance = 'X'
-                player.position = tiles[nextIndex]
             }
+            println("Player stuck and cannot move")
+        }
+
+        fun prettyPrint(): String {
+            tiles.removeIf { it.appearance == 'W' }
+            val maxX = tiles.maxOfOrNull { it.x } ?: 0
+            val maxY = tiles.maxOfOrNull { it.y } ?: 0
+            val mapGrid = Array(maxY + 1) { CharArray(maxX + 1) { ' ' } }
+            tiles.forEach { mapGrid[it.y][it.x] = it.appearance }
+            mapGrid[player.position.y][player.position.x] = player.playerChar
+            return mapGrid.joinToString("\n") { it.concatToString() }
         }
 
         companion object {
             fun parse(input: String): Map {
-                var player = Player(position = Tile(1,1, '^'))
-                input.lines().indices.forEach { y ->
-                    input.lines()[y].indices.forEach { x ->
-                        if (input.lines()[x][y] == '^') {
-                            player = Player(position = Tile(x, y, '^'))
-                        }
+                val tiles = mutableListOf<Tile>()
+                var player = Player(position = Tile(1, 1, '^'))
+
+                input.lineSequence().forEachIndexed { y, line ->
+                    line.forEachIndexed { x, char ->
+                        tiles.add(Tile(x, y, char))
+                        if (char == '^') player = Player(position = Tile(x, y, char))
                     }
                 }
-                return Map(
-                    buildList {
-                        input.lineSequence().forEachIndexed { indexLine, s ->
-                            s.forEachIndexed { indexChar, c ->
-                                add(Tile(indexChar, indexLine, c))
-                            }
-                        }
-                    }.toMutableList(),
-                    player
-                )
+
+                return Map(tiles, player)
             }
         }
     }
