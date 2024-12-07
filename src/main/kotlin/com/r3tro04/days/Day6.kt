@@ -12,10 +12,62 @@ object Day6 : AoCDay {
         while (map.tiles.none { it.appearance == 'W' }) {
             map.movePlayer()
         }
+        println("done")
         return map.tiles.count { it.appearance == 'X' } + 1
     }
 
-    override fun executePart2(input: String): Any = "(not implemented)"
+    override fun executePart2(input: String): Int {
+        val originalMap = GameMap.parse(input)
+        val playerStart = originalMap.player.position
+
+        // Identify candidate positions
+        val candidateTiles = originalMap.tiles.filter { tile ->
+            // Can't place on the player's start
+            if (tile.x == playerStart.x && tile.y == playerStart.y) return@filter false
+            // Can't place on walls or other invalid chars
+            // Typically we'd consider placing on '.' or 'X' or other free spots.
+            tile.appearance != '#' &&
+                    tile.appearance != '^' && tile.appearance != 'v' &&
+                    tile.appearance != '<' && tile.appearance != '>' &&
+                    tile.appearance != 'W'
+        }
+
+        var loopCount = 0
+
+        for (tile in candidateTiles) {
+            // Try placing an obstruction here and simulate
+            val mapCopy = originalMap.copyDeep()
+            val obstructionTile = mapCopy.getTileAt(tile.x, tile.y)
+            // If for some reason tile can't be found in copy, continue
+            if (obstructionTile == null) continue
+
+            obstructionTile.appearance = '#'
+            if (causesLoop(mapCopy)) {
+                println(loopCount)
+                loopCount++
+            }
+        }
+
+        return loopCount
+    }
+
+    private fun causesLoop(map: GameMap): Boolean {
+        // We run a simulation and track visited states
+        val visitedStates = mutableSetOf<Triple<Int, Int, Char>>()
+
+        // We'll run until we either hit 'W' or detect a loop
+        while (map.tiles.none { it.appearance == 'W' }) {
+            val state = Triple(map.player.position.x, map.player.position.y, map.player.playerChar)
+            if (!visitedStates.add(state)) {
+                // We revisited a state => loop detected
+                return true
+            }
+            map.movePlayer()
+        }
+
+        // If we got 'W', no loop
+        return false
+    }
 
     data class Player(
         var playerChar: Char,
@@ -59,9 +111,9 @@ object Day6 : AoCDay {
                 }
 
                 val nextTile = getTileAt(px + dx, py + dy)
-
                 when {
                     nextTile == null -> {
+                        // Out of known map, add 'W' and return
                         tiles.add(Tile(Int.MAX_VALUE, Int.MAX_VALUE, 'W'))
                         return
                     }
@@ -69,6 +121,7 @@ object Day6 : AoCDay {
                         player.playerChar = player.rotate90()
                     }
                     else -> {
+                        // Mark old position as visited
                         getTileAt(px, py)?.appearance = 'X'
                         player.position = nextTile
                         return
@@ -77,7 +130,14 @@ object Day6 : AoCDay {
             }
         }
 
-        private fun getTileAt(x: Int, y: Int): Tile? = tiles.find { it.x == x && it.y == y }
+        fun getTileAt(x: Int, y: Int): Tile? = tiles.find { it.x == x && it.y == y }
+
+        fun copyDeep(): GameMap {
+            val newTiles = tiles.map { Tile(it.x, it.y, it.appearance) }.toMutableList()
+            val playerTile = newTiles.first { it.x == player.position.x && it.y == player.position.y && it.appearance == player.playerChar }
+            val newPlayer = Player(playerChar = player.playerChar, position = playerTile)
+            return GameMap(newTiles, newPlayer)
+        }
 
         companion object {
             fun parse(input: String): GameMap {

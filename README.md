@@ -1,8 +1,8 @@
 ![](https://img.shields.io/badge/Kotlin-2.1.0-7F52FF?logo=kotlin)
 ![](https://img.shields.io/badge/Gradle-8.11.1-02303A?logo=gradle)
-![](https://img.shields.io/badge/day%20📆-5-red)
-![](https://img.shields.io/badge/stars%20⭐-10-gold)
-![](https://img.shields.io/badge/days%20completed%20✅-5-58CC02)
+![](https://img.shields.io/badge/day%20📆-7-red)
+![](https://img.shields.io/badge/stars%20⭐-12-gold)
+![](https://img.shields.io/badge/days%20completed%20✅-6-58CC02)
 
 # AoC-2024
 
@@ -17,6 +17,7 @@ Thank you honey 🫶🏼
 - [Day 3](src/main/kotlin/com/r3tro04/days/Day3.kt): solved, 2 stars ([input](input/day3.txt))
 - [Day 4](src/main/kotlin/com/r3tro04/days/Day4.kt): solved, 2 stars ([input](input/day4.txt))
 - [Day 5](src/main/kotlin/com/r3tro04/days/Day5.kt): solved, 2 stars ([input](input/day5.txt))
+- [Day 6](src/main/kotlin/com/r3tro04/days/Day6.kt): solved, 2 stars ([input](input/day6.txt))
 
 
 ### Contents:
